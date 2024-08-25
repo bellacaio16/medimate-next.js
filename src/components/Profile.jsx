@@ -45,8 +45,8 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-sm mx-4 sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg mx-auto mt-8 shadow-xl rounded-lg text-gray-900">
-      <div className="relative h-32 overflow-hidden rounded-t-lg">
+    <div className="max-w-sm mx-4 z-20 sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg mx-auto mt-8 shadow-xl rounded-lg text-gray-900">
+      <div className="relative h-32 overflow-hidden rounded-t-lg z-20">
         <Image
           layout="fill"
           className="object-cover object-top w-full"
@@ -54,7 +54,7 @@ export default function Profile() {
           alt="Background"
         />
       </div>
-      <div className="relative -mt-16 mx-auto w-24 h-24 sm:w-32 sm:h-32 border-4 border-white bg-white rounded-full overflow-hidden">
+      <div className="relative -mt-16 z-20 mx-auto w-24 h-24 sm:w-32 sm:h-32 border-4 border-white bg-white rounded-full overflow-hidden">
         <Image
           width={120}
           height={120}
@@ -63,11 +63,11 @@ export default function Profile() {
           alt="Profile"
         />
       </div>
-      <div className="text-center mt-4">
+      <div className="text-center mt-4 z-20">
         <h2 className="text-xl font-semibold">{user.name}</h2>
         <p className="text-gray-500 mt-1">{user.email}</p>
       </div>
-      <div className="p-4 border-t mx-4 mt-4">
+      <div className="p-4 border-t mx-4 mt-4 z-20">
         <button
           onClick={handleSignout}
           className="w-full rounded-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 font-semibold text-white px-6 py-2"
