@@ -1,12 +1,11 @@
-"use client";
+'use client';
 import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import medicine from "../app/assets/medicine.png";
 import { viewService } from "@/services/viewService";
-
 import { deletePrescription } from "@/services/deletePrescription";
 import UserContext from "@/context/userContext";
-// import { profileService } from "@/services/profileService";
+
 export const View = () => {
   const userContext = useContext(UserContext);
   const [userId, setUserId] = useState(userContext.currentUser?._id);
@@ -14,7 +13,6 @@ export const View = () => {
 
   const fetchPrescriptions = async () => {
     try {
-      // await fetchUser();
       const response = await viewService(userId);
       setPrescriptions(response.result);
       console.log(response.result);
@@ -22,91 +20,79 @@ export const View = () => {
       console.log(err);
     }
   };
+
   useEffect(() => {
     setUserId(userContext.currentUser?._id);
     fetchPrescriptions();
   }, [userContext.currentUser]);
+
   // Function to format date string
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0]; // Extract and return date portion
   };
+
   const handleDelete = async (id) => {
-    try{
-      console.log("Pres Id:",id);
+    try {
+      console.log("Pres Id:", id);
       const response = await deletePrescription(id);
       console.log(response);
-      const newArray = prescriptions.filter(each => each?._id !=id);
-      setPrescriptions(newArray)
-    }catch(err){
-console.log(err)
+      const newArray = prescriptions.filter(each => each?._id !== id);
+      setPrescriptions(newArray);
+    } catch (err) {
+      console.log(err);
     }
   };
+
   return (
-    <section className="">
-      <div className="py-8 px-4 mx-auto max-w-screen-l lg:py-10 lg:px-12 flex justify-center flex-col">
-        <div className="mx-auto max-w-screen-sm text-center mb-4 lg:mb-10">
-          <h2 className="mb-4 text-2xl tracking-tight font-medium text-gray-900 dark:text-white">
-            {/* <CloseButton /> */}
-            My Prescriptions ({prescriptions?.length})
-          </h2>
-        </div>
-        <div className="flex gap-8 mb-6 lg:mb-16 flex-col w-6/12 mx-auto">
-          {prescriptions?.map((each, index) => {
-            return (
-              <div
-                className="items-center bg-white rounded-lg grid grid-flow-col shadow-lg sm:flex p-4 grid-cols-3 relative"
-                key={index}
+    <section className="py-8 px-4 mx-auto max-w-screen-lg lg:py-10 lg:px-12">
+      <div className="text-center mb-4 lg:mb-10">
+        <h2 className="text-2xl font-medium text-gray-900 dark:text-white">
+          My Prescriptions ({prescriptions?.length})
+        </h2>
+      </div>
+      <div className="flex flex-col gap-8 lg:gap-12">
+        {prescriptions?.map((each, index) => (
+          <div
+            className="bg-white rounded-lg shadow-lg flex flex-col sm:flex-row p-4"
+            key={index}
+          >
+            <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-4">
+              <Image
+                width="66"
+                height="66"
+                className="w-16 h-16 rounded-lg"
+                src={medicine}
+                alt="Medicine"
+              />
+            </div>
+            <div className="flex-1 mb-4 sm:mb-0">
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
+                {each.name}
+              </h3>
+              <p className="text-gray-800 dark:text-gray-400 mb-1">
+                Dosage: {each.dosage}
+              </p>
+              <p className="text-gray-800 dark:text-gray-400">
+                Frequency: {each.frequency}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-gray-800 dark:text-gray-400 mb-1">
+                Start Date: {formatDate(each.date)}
+              </p>
+              <p className="text-gray-800 dark:text-gray-400">
+                Dosage Timing: {each.timing}
+              </p>
+              <button
+                onClick={() => handleDelete(each?._id)}
+                className="mt-2 py-2 px-4 rounded-md bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800"
               >
-                <div className="p-1 mr-5">
-                  <Image
-                    width="66"
-                    height="66"
-                    className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
-                    src={medicine}
-                    alt="Bonnie Avatar"
-                  />
-                </div>
-                <div className="p-5">
-                  {/* <span className="rounded-full ml-auto mr-0">
-                      <RxCross1 /></span> */}
-                  <div className="w-max grid grid-cols-2 mb-7">
-                    <h3 className="text-xl font-bold tracking-tight text-slate-800 dark:text-white flex justify-between">
-                      <a href="#">{each.name} </a>
-                    </h3>
-                  </div>
-                  <div className=" mt-auto">
-                    <h3 className="text-gray-800 dark:text-gray-400 ">
-                      Dosage: {each.dosage}
-                    </h3>
-                    <p className="text-gray-800 dark:text-gray-400">
-                      Frequency: {each.frequency}
-                    </p>
-                  </div>
-                </div>
-                <div className="p-5 text-right mt-auto ml-auto">
-                  <h1 className="mb-5"></h1>
-                  <h3 className="text-gray-800 dark:text-gray-400">
-                    Start Date: {formatDate(each.date)}
-                  </h3>
-                  <p className="  text-gray-800 dark:text-gray-400">
-                    Dosage Timing: {each.timing}
-                  </p>
-                  <div className="w-full text-right">
-                    <button
-                      onClick={() => {
-                        handleDelete(each?._id);
-                      }}
-                      className="hover:bg-blue-700 active:bg-blue-800 rounded-md bg-blue-600 py-2 px-4 text-center text-base font-semibold text-white outline-none  my-2 "
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
